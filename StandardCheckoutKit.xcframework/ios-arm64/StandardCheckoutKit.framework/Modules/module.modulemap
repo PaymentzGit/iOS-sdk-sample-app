@@ -1,0 +1,11 @@
+framework module StandardCheckoutKit {
+  umbrella header "StandardCheckoutKit.h"
+  export *
+
+  module * { export * }
+}
+
+module StandardCheckoutKit.Swift {
+  header "StandardCheckoutKit-Swift.h"
+  requires objc
+}
