@@ -22,13 +22,13 @@ class ViewController: UIViewController, StandardCheckoutDelegate {
         
         let requestParameters = RequestParameters()
         requestParameters.memberId = "10558"
-        requestParameters.paymentMode = PaymentMode.CC
+        requestParameters.paymentMode = ""
         requestParameters.terminalId = "7079"
-        requestParameters.merchantTransactionId = "randomnumber265757"
+        requestParameters.merchantTransactionId = "PZ858473484575536"
         requestParameters.amount = "50.00"
         requestParameters.currency = "USD"
         requestParameters.toType = "paymentz"
-        requestParameters.paymentBrand = PaymentBrand.visa
+        requestParameters.paymentBrand = ""
         requestParameters.orderDescription = "Test"
         requestParameters.country = "IN"
         requestParameters.state = "MH"
@@ -47,15 +47,30 @@ class ViewController: UIViewController, StandardCheckoutDelegate {
 
     // Delegate methods is where you will receive the payment result
     func onSuccess(standardCheckoutResult: StandardCheckoutResult) {
-        let resultViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ResultViewController") as! ResultViewController
-        let json = standardCheckoutResult.json
-        resultViewController.standardCheckoutResult = "\(json)"
-        let resultNavigationController: UINavigationController = UINavigationController(rootViewController: resultViewController)
-        self.present(resultNavigationController, animated: true, completion: nil)
+        print("standardCheckoutResult: \(standardCheckoutResult.json)")
+//        let resultViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ResultViewController") as! ResultViewController
+//        let json = standardCheckoutResult.json
+//        resultViewController.standardCheckoutResult = "\(json)"
+//        let resultNavigationController: UINavigationController = UINavigationController(rootViewController: resultViewController)
+//        self.present(resultNavigationController, animated: true, completion: nil)
+        let resultCode = standardCheckoutResult.json["resultCode"] as? Int ?? 0
+        let message = standardCheckoutResult.json["resultDescription"] as? String
+        
+        if resultCode == 00001{
+            let alert = UIAlertController(title: "Success", message: message, preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }else{
+            let alert = UIAlertController(title: "Failed", message: message, preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+
     }
     
     func onFail(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }

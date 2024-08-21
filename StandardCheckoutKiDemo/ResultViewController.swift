@@ -16,7 +16,7 @@ class ResultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        labelResult.text = standardCheckoutResult
+//        labelResult.text = standardCheckoutResult
     }
     
     @IBAction func closeNavigationButton(_ sender: UIBarButtonItem) {
