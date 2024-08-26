@@ -21,10 +21,20 @@ class ViewController: UIViewController, StandardCheckoutDelegate {
   
     @IBAction func pay(_ sender: UIButton) {
         
-        guard let merchantId = merchantId.text, !merchantId.isEmpty else { UIAlertController(title: "Mandatory Field", message: "Please enter Merchant Id", preferredStyle: .alert).show(self, sender: nil)
+        guard let merchantId = merchantId.text, !merchantId.isEmpty else {
+            let alert = UIAlertController(title: "Mandatory Field", message: "Please enter Merchant Id", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                alert.dismiss(animated: true)
+            }))
+            self.present(alert, animated: true)
             return
         }
-        guard let amount = Float(amount.text!), amount >= 1 else { UIAlertController(title: "Mandatory Field", message: "Please enter Merchant Id", preferredStyle: .alert).show(self, sender: nil)
+        guard let amount = Float(amount.text!), amount >= 1 else { 
+            let alert = UIAlertController(title: "Invalid Amount", message: "Please enter valid amount", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                alert.dismiss(animated: true)
+            }))
+            self.present(alert, animated: true)
             return
         }
 
