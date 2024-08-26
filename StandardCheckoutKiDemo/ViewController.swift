@@ -11,6 +11,9 @@ import StandardCheckoutKit
 
 class ViewController: UIViewController, StandardCheckoutDelegate {
 
+    @IBOutlet weak var merchantId: UITextField!
+    @IBOutlet weak var amount: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -18,14 +21,21 @@ class ViewController: UIViewController, StandardCheckoutDelegate {
   
     @IBAction func pay(_ sender: UIButton) {
         
+        guard let merchantId = merchantId.text, !merchantId.isEmpty else { UIAlertController(title: "Mandatory Field", message: "Please enter Merchant Id", preferredStyle: .alert).show(self, sender: nil)
+            return
+        }
+        guard let amount = Float(amount.text!), amount >= 1 else { UIAlertController(title: "Mandatory Field", message: "Please enter Merchant Id", preferredStyle: .alert).show(self, sender: nil)
+            return
+        }
+
         let secureKey = "bzI93aEQeYDeE50Pa929NiDk3us8XTbU"
         
         let requestParameters = RequestParameters()
         requestParameters.memberId = "10558"
         requestParameters.paymentMode = ""
         requestParameters.terminalId = "7079"
-        requestParameters.merchantTransactionId = "PZ858473484575536"
-        requestParameters.amount = "50.00"
+        requestParameters.merchantTransactionId = merchantId
+        requestParameters.amount = String(amount)
         requestParameters.currency = "USD"
         requestParameters.toType = "paymentz"
         requestParameters.paymentBrand = ""
@@ -48,11 +58,6 @@ class ViewController: UIViewController, StandardCheckoutDelegate {
     // Delegate methods is where you will receive the payment result
     func onSuccess(standardCheckoutResult: StandardCheckoutResult) {
         print("standardCheckoutResult: \(standardCheckoutResult.json)")
-//        let resultViewController = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ResultViewController") as! ResultViewController
-//        let json = standardCheckoutResult.json
-//        resultViewController.standardCheckoutResult = "\(json)"
-//        let resultNavigationController: UINavigationController = UINavigationController(rootViewController: resultViewController)
-//        self.present(resultNavigationController, animated: true, completion: nil)
         let resultCode = standardCheckoutResult.json["resultCode"] as? Int ?? 0
         let message = standardCheckoutResult.json["resultDescription"] as? String
         
